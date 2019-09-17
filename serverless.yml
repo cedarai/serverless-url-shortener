@@ -73,6 +73,7 @@ resources:
                 - "Access-Control-Request-Headers"
                 - "Access-Control-Request-Method"
                 - "Origin"
+                - "Content-Disposition"
             ViewerProtocolPolicy: "redirect-to-https"
             MinTTL: 0
             AllowedMethods:
