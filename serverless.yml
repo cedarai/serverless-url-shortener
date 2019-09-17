@@ -62,6 +62,7 @@ resources:
                   - "TLSv1.2"
                 OriginReadTimeout: 30
                 OriginKeepaliveTimeout: 5
+          DefaultRootObject: index.html
           DefaultCacheBehavior:
             TargetOriginId: !Sub "S3-url-shortener"
             ForwardedValues:
