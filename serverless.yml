@@ -51,7 +51,12 @@ resources:
             - s.cedarai.com
           Origins:
             - Id: !Sub "S3-url-shortener"
-              DomainName: !GetAtt ServerlesslyRedirectS3Bucket.WebsiteURL
+              DomainName:
+                Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "//"
+                      - !GetAtt ServerlesslyRedirectS3Bucket.WebsiteURL
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
