@@ -51,17 +51,7 @@ resources:
             - s.cedarai.com
           Origins:
             - Id: !Sub "S3-url-shortener"
-              DomainName: !GetAtt ServerlesslyRedirectS3Bucket.RegionalDomainName
-              CustomOriginConfig:
-                HTTPPort: 80
-                HTTPSPort: 443
-                OriginProtocolPolicy: "http-only"
-                OriginSSLProtocols:
-                  - "TLSv1"
-                  - "TLSv1.1"
-                  - "TLSv1.2"
-                OriginReadTimeout: 30
-                OriginKeepaliveTimeout: 5
+              DomainName: !GetAtt ServerlesslyRedirectS3Bucket.WebsiteURL
           DefaultRootObject: index.html
           DefaultCacheBehavior:
             TargetOriginId: !Sub "S3-url-shortener"
@@ -73,7 +63,6 @@ resources:
                 - "Access-Control-Request-Headers"
                 - "Access-Control-Request-Method"
                 - "Origin"
-                - "Content-Disposition"
             ViewerProtocolPolicy: "redirect-to-https"
             MinTTL: 0
             AllowedMethods:
