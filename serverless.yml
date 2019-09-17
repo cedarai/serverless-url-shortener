@@ -52,6 +52,16 @@ resources:
           Origins:
             - Id: !Sub "S3-url-shortener"
               DomainName: !GetAtt ServerlesslyRedirectS3Bucket.WebsiteURL
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: "http-only"
+                OriginSSLProtocols:
+                  - "TLSv1"
+                  - "TLSv1.1"
+                  - "TLSv1.2"
+                OriginReadTimeout: 30
+                OriginKeepaliveTimeout: 5
           DefaultRootObject: index.html
           DefaultCacheBehavior:
             TargetOriginId: !Sub "S3-url-shortener"
@@ -103,3 +113,13 @@ resources:
         HostedZoneName: "cedarai.com."
         Name: s.cedarai.com
         Type: A
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: api.cedar.ai
+    basePath: url-shortener
+    stage: ${file(config.json):STAGE}
+    createRoute53Record: true

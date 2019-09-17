@@ -11,5 +11,8 @@
   },
   "dependencies": {
     "aws-sdk": "^2.112.0"
+  },
+  "devDependencies": {
+    "serverless-domain-manager": "^3.3.0"
   }
 }

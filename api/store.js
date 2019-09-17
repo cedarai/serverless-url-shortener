@@ -30,7 +30,7 @@ module.exports.handle = (event, context, callback) => {
     })
 }
 
-function validate (longUrl) {
+function validate(longUrl) {
   if (longUrl === '') {
     return Promise.reject({
       statusCode: 400,
@@ -49,7 +49,7 @@ function validate (longUrl) {
   return Promise.resolve(longUrl)
 }
 
-function getPath () {
+function getPath() {
   return new Promise(function (resolve, reject) {
     let path = generatePath()
     isPathFree(path)
@@ -59,7 +59,7 @@ function getPath () {
   })
 }
 
-function generatePath (path = '') {
+function generatePath(path = '') {
   let characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   let position = Math.floor(Math.random() * characters.length)
   let character = characters.charAt(position)
@@ -71,21 +71,22 @@ function generatePath (path = '') {
   return generatePath(path + character)
 }
 
-function isPathFree (path) {
+function isPathFree(path) {
   return S3.headObject(buildRedirect(path)).promise()
     .then(() => Promise.resolve(false))
     .catch((err) => err.code == 'NotFound' ? Promise.resolve(true) : Promise.reject(err))
 }
 
-function saveRedirect (redirect) {
+function saveRedirect(redirect) {
   return S3.putObject(redirect).promise()
     .then(() => Promise.resolve(redirect['Key']))
 }
 
-function buildRedirect (path, longUrl = false) {
+function buildRedirect(path, longUrl = false) {
   let redirect = {
     'Bucket': config.BUCKET,
     'Key': path,
+    'Tagging': 'Usage=Shortener'
   }
 
   if (longUrl) {
@@ -95,9 +96,9 @@ function buildRedirect (path, longUrl = false) {
   return redirect
 }
 
-function buildRedirectUrl (path) {
+function buildRedirectUrl(path) {
   let baseUrl = `https://${config.BUCKET}.s3.${config.REGION}.amazonaws.com/`
-  
+
   if ('BASE_URL' in config && config['BASE_URL'] !== '') {
     baseUrl = config['BASE_URL']
   }
@@ -105,7 +106,7 @@ function buildRedirectUrl (path) {
   return baseUrl + path
 }
 
-function buildResponse (statusCode, message, path = false) {
+function buildResponse(statusCode, message, path = false) {
   let body = { message }
 
   if (path) {
