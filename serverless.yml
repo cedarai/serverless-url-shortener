@@ -36,9 +36,79 @@ resources:
         Bucket: ${file(config.json):BUCKET}
         PolicyDocument:
           Statement:
-          - Action:
-            - s3:GetObject
-            Effect: Allow
-            Resource:
-            - arn:${file(config.json):S3_PARTITION}:s3:::${file(config.json):BUCKET}/*
-            Principal: "*"
+            - Action:
+                - s3:GetObject
+              Effect: Allow
+              Resource:
+                - arn:${file(config.json):S3_PARTITION}:s3:::${file(config.json):BUCKET}/*
+              Principal: "*"
+    ServerlesslyCloudfront:
+      Type: "AWS::CloudFront::Distribution"
+      Properties:
+        DistributionConfig:
+          Aliases:
+            - s.cedar.ai
+            - s.cedarai.com
+          Origins:
+            - Id: !Sub "S3-url-shortener"
+              DomainName: !GetAtt ServerlesslyRedirectS3Bucket.RegionalDomainName
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: "http-only"
+                OriginSSLProtocols:
+                  - "TLSv1"
+                  - "TLSv1.1"
+                  - "TLSv1.2"
+                OriginReadTimeout: 30
+                OriginKeepaliveTimeout: 5
+          DefaultCacheBehavior:
+            TargetOriginId: !Sub "S3-url-shortener"
+            ForwardedValues:
+              QueryString: false
+              Cookies:
+                Forward: "none"
+              Headers:
+                - "Access-Control-Request-Headers"
+                - "Access-Control-Request-Method"
+                - "Origin"
+            ViewerProtocolPolicy: "redirect-to-https"
+            MinTTL: 0
+            AllowedMethods:
+              - "HEAD"
+              - "GET"
+            CachedMethods:
+              - "HEAD"
+              - "GET"
+            SmoothStreaming: false
+            DefaultTTL: 86400
+            MaxTTL: 31536000
+            Compress: false
+          Enabled: true
+          PriceClass: "PriceClass_100"
+          ViewerCertificate:
+            AcmCertificateArn: "arn:aws:acm:us-east-1:580226297183:certificate/c62c699d-9c22-41ae-b50e-500dd4512024"
+            SslSupportMethod: "sni-only"
+            MinimumProtocolVersion: "TLSv1.1_2016"
+          HttpVersion: "http2"
+          IPV6Enabled: true
+    ServerlesslyRecordset1:
+      Type: "AWS::Route53::RecordSet"
+      Properties:
+        AliasTarget:
+          DNSName: !GetAtt ServerlesslyCloudfront.DomainName
+          EvaluateTargetHealth: false
+          HostedZoneId: "Z2FDTNDATAQYW2"
+        HostedZoneName: "cedar.ai."
+        Name: s.cedar.ai
+        Type: A
+    ServerlesslyRecordset2:
+      Type: "AWS::Route53::RecordSet"
+      Properties:
+        AliasTarget:
+          DNSName: !GetAtt ServerlesslyCloudfront.DomainName
+          EvaluateTargetHealth: false
+          HostedZoneId: "Z2FDTNDATAQYW2"
+        HostedZoneName: "cedarai.com."
+        Name: s.cedarai.com
+        Type: A
