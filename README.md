@@ -13,7 +13,7 @@ https://s.cedar.ai
 
 ### By API
 
-POST the following content to the API endpoint https://api.cedarai.com/url-shortener
+POST the following JSON string to the API endpoint https://api.cedarai.com/url-shortener
 
 ```json
 { "url": "https://you_url" }
