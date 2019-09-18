@@ -35,6 +35,7 @@
     </div>
   </div>
   <script src="jquery-3.2.1.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     $('form').submit(function (event) {
       event.preventDefault()
@@ -43,21 +44,18 @@
     })
 
     function shortenLink(apiUrl, longUrl) {
-      $.ajax(apiUrl, {
-        type: 'POST',
-        data: JSON.stringify({ url: longUrl })
-      })
-        .done(function (responseJSON) {
-          var shortUrl = window.location.protocol + '//' + window.location.host + '/' + responseJSON.path
+      axios.post(apiUrl, { url: longUrl })
+        .then(function (response) {
+          var shortUrl = window.location.protocol + '//' + window.location.host + '/' + response.data.path
           addMessage(shortUrl)
         })
-        .fail(function (data) {
-          if (data.status === 400) {
-            addMessage(data.responseJSON.message)
+        .catch(function (error) {
+          if ((error.response || {}).status === 400) {
+            addMessage(error.response.data)
           } else {
             addMessage('an unexpected error occurred')
           }
-        })
+        });
     }
 
     function addMessage(text) {

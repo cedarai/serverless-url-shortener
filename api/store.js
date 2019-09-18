@@ -14,7 +14,7 @@ module.exports.handle = (event, context, callback) => {
       return getPath()
     })
     .then(function (path) {
-      let redirect = buildRedirect(path, longUrl)
+      let redirect = buildRedirect(path, longUrl, true)
       return saveRedirect(redirect)
     })
     .then(function (path) {
@@ -82,11 +82,14 @@ function saveRedirect(redirect) {
     .then(() => Promise.resolve(redirect['Key']))
 }
 
-function buildRedirect(path, longUrl = false) {
+function buildRedirect(path, longUrl = false, response = false) {
   let redirect = {
     'Bucket': config.BUCKET,
     'Key': path,
-    'Tagging': 'Usage=Shortener'
+  }
+
+  if (response) {
+    redirect['Tagging'] = 'Usage=Shortener';
   }
 
   if (longUrl) {
@@ -116,7 +119,11 @@ function buildResponse(statusCode, message, path = false) {
 
   return {
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, PUT, OPTIONS, DELETE',
+      'Access-Control-Max-Age': '3600',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     },
     statusCode: statusCode,
     body: JSON.stringify(body)
