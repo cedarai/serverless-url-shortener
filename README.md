@@ -19,6 +19,16 @@ POST the following JSON string to the API endpoint https://api.cedar.ai/url-shor
 { "url": "https://you_url" }
 ```
 
+and a successful response looks like this
+
+```json
+{
+   "message":"URL successfully shortened",
+   "path":"aMcmhQq",
+   "url":"https://s.cedar.ai/aMcmhQq"
+}
+```
+
 ## Setup
 ### Install dependencies
 Head on over to the [Serverless Framework docs](https://medium.com/r/?url=https%3A%2F%2Fserverless.com%2Fframework%2Fdocs%2Fproviders%2Faws%2Fguide%2Fquick-start%2F) and run through their quick-start guide. It’s mentioned in there as part of your setup, but be sure to install the AWS CLI and configure your AWS credentials. Then run `npm install` to get the NPM dependencies for the project.
