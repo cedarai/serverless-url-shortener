@@ -9,7 +9,9 @@ const config = require('../config.json')
 
 module.exports.handle = (event, context, callback) => {
   let longUrl = JSON.parse(event.body).url || ''
-  validate(longUrl)
+  let origin = event['headers']['origin'] || event['headers']['Origin'];
+
+  validate(longUrl, origin)
     .then(function () {
       return getPath()
     })
@@ -30,7 +32,21 @@ module.exports.handle = (event, context, callback) => {
     })
 }
 
-function validate(longUrl) {
+function validate(longUrl, origin) {
+  if (!origin) {
+    return Promise.reject({
+      statusCode: 400,
+      message: 'Only use the API from a browser'
+    })
+  }
+
+  if (origin !== 'http://localhost:4200' && origin.indexOf('cedar.ai') < 0 && origin.indexOf('cedarai.com') < 0) {
+    return Promise.reject({
+      statusCode: 400,
+      message: 'Only allowed for Cedar.AI'
+    })
+  }
+
   if (longUrl === '') {
     return Promise.reject({
       statusCode: 400,
