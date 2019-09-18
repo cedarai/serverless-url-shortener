@@ -100,7 +100,7 @@ function buildRedirect(path, longUrl = false, response = false) {
 }
 
 function buildRedirectUrl(path) {
-  let baseUrl = `https://${config.BUCKET}.s3.${config.REGION}.amazonaws.com/`
+  let baseUrl = config.CNAME || `https://${config.BUCKET}.s3.${config.REGION}.amazonaws.com/`
 
   if ('BASE_URL' in config && config['BASE_URL'] !== '') {
     baseUrl = config['BASE_URL']
@@ -123,7 +123,7 @@ function buildResponse(statusCode, message, path = false) {
       'Access-Control-Allow-Methods': 'POST, GET, PUT, OPTIONS, DELETE',
       'Access-Control-Max-Age': '3600',
       'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access, Company-Id'
     },
     statusCode: statusCode,
     body: JSON.stringify(body)

@@ -2,6 +2,7 @@
   "BUCKET": "",
   "S3_PARTITION": "aws",
   "REGION": "eu-west-1",
+  "CNAME": "",
   "STAGE": "dev",
   "API_ENDPOINT_TYPE": "EDGE",
   "API_URL": ""

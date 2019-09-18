@@ -19,7 +19,11 @@ functions:
       - http:
           path: /
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            maxAge: 86400
+            headers: ${self:custom.allowed-headers}
+            allowCredentials: true
 
 resources:
   Resources:
@@ -30,6 +34,13 @@ resources:
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
+        LifecycleConfiguration:
+          Rules:
+            - ExpirationInDays: 60
+              Status: Enabled
+              TagFilters:
+                - Key: Usage
+                  Value: Shortener
     ServerlesslyRedirectS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -128,3 +139,13 @@ custom:
     basePath: url-shortener
     stage: ${file(config.json):STAGE}
     createRoute53Record: true
+  allowed-headers:
+    - company-id
+    - access
+    - Content-Type
+    - cache-control
+    - X-Amz-Date
+    - Authorization
+    - X-Api-Key
+    - X-Amz-Security-Token
+    - X-Amz-User-Agent
