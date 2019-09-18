@@ -4,8 +4,6 @@ UI https://s.cedar.ai or API https://api.cedar.ai/url-shortener/
 
 A lightweight URL shortener built with the Serverless Framework using AWS Lambda and S3. Each URL redirection is stored as an S3 object with the `Website-Redirect-Location` metadata key set to the forwarding web address. AWS Lambda is used to create an API to save these objects. The website is served from the same S3 bucket.
 
-![Screenshot](readme-screenshot.png)
-
 ## Usage
 
 ### By UI
