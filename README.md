@@ -55,4 +55,5 @@ Run `npm run deploy:static` to deploy the website using the AWS CLI.
 ## Libraries used
 - [Serverless Framework](https://serverless.com) for project structure and deployment.
 - [PaperCSS Framework](https://github.com/papercss/papercss) for the frontend design.
-- [jQuery](https://jquery.com) to simplify working with the DOM and making AJAX queries.
+- [axios](https://github.com/axios/axios) for making AJAX queries.
+- [jQuery](https://jquery.com) to simplify working with the DOM.
