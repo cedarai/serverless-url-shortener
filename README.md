@@ -11,7 +11,7 @@ https://s.cedar.ai
 
 ### By API
 
-Currently, the API only allows browser access from any cedar.ai or cedarai.com sub-domains. POST the following JSON string to the API endpoint https://api.cedar.ai/url-shortener/
+Currently, the API only allows browser access from any **cedar.ai** or **cedarai.com** sub-domains. POST the following JSON string to the API endpoint https://api.cedar.ai/url-shortener/
 
 ```json
 { "url": "https://you_url" }
