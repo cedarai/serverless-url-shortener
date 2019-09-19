@@ -36,11 +36,13 @@ resources:
           IndexDocument: index.html
         LifecycleConfiguration:
           Rules:
-            - ExpirationInDays: 60
-              Status: Enabled
+            - Status: Enabled
               TagFilters:
                 - Key: Usage
                   Value: Shortener
+              Transitions:
+                - StorageClass: ONEZONE_IA
+                  TransitionInDays: 30
     ServerlesslyRedirectS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
